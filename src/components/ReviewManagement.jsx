@@ -1,114 +1,194 @@
-import React from 'react';
 import '../css/ReviewManagement.css';
 import searchIcon from '../css/searchIcon.png';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const ReviewManagement = () => {
-    const [reviews, setreviews] = useState([
-        { index: 23, exhibitionNo: 3, title: '오픈런 까먹지 말기!!!! 예매처 엑사이트!!!!!!!!!!@@@', id: 'TEST123', date: '2024-10-16'},
-        { index: 22, exhibitionNo: 2, title: '완전 기대된다!', id: 'TEST123', date: '2024-10-16'},
-        { index: 21, exhibitionNo: 1, title: '같이 보러 가요~', id: 'TEST123', date: '2024-10-16'},
-        { index: 20, exhibitionNo: 1, title: '같이 보러 가요~', id: 'TEST123', date:'2024-10-16'},
-        { index: 19, exhibitionNo: 1, title: '오픈런 까먹지 말기!!!! 예매처 엑사이트!!!!!!!!!! 같이 보러 가요~', id: 'TEST123', date:'2024-10-16'},
-        { index: 18, exhibitionNo: 1, title: '완전 기대된다!', id: 'TEST123', date:'2024-10-16'},
-        { index: 17, exhibitionNo: 1, title: '같이 보러 가요~', id: 'TEST123', date:'2024-10-16'},
-        { index: 16, exhibitionNo: 1, title: '같이 보러 가요~', id: '관리자', date: '2024-10-01'},
-        { index: 15, exhibitionNo: 1, title: '같이 보러 가요~', id: 'TEST123', date:'2024-10-16'},
-        { index: 14, exhibitionNo: 1, title: '같이 보러 가요~', id: 'TEST123', date:'2024-10-16'},
-        { index: 13, exhibitionNo: 1, title: '같이 보러 가요~', id: 'TEST123', date:'2024-10-16'},
-        { index: 12, exhibitionNo: 1, title: '오픈런 까먹지 말기!!!! 예매처 엑사이트!!!!!!!!!! 같이 보러 가요~', id: 'TEST123', date:'2024-10-16'},
-        { index: 11, exhibitionNo: 1, title: '오픈런 까먹지 말기!!!! 예매처 엑사이트!!!!!!!!!! 같이 보러 가요~', id: 'TEST123', date:'2024-10-16'}
-    ]);
+    const [reviews, setReviews] = useState([]);
+    const [checkItems, setCheckItems] = useState([]); // 선택된 항목 ID 배열
+    const [currentPage, setCurrentPage] = useState(1);
+    const reviewsPerPage = 13;
 
-    const [selectedreviews, setSelectedreviews] = useState(new Set());
+    const indexOfLastreview = currentPage * reviewsPerPage;
+    const indexOfFirstreview = indexOfLastreview - reviewsPerPage;
+    const currentreviews = reviews.slice(indexOfFirstreview, indexOfLastreview);
 
-    const handleSelectreview = (index) => {
-        const newSelectedreviews = new Set(selectedreviews);
-        if (newSelectedreviews.has(index)) {
-            newSelectedreviews.delete(index); // 이미 선택된 경우 선택 해제
+    const totalPages = Math.ceil(reviews.length / reviewsPerPage);
+
+    useEffect(() => {
+        axios
+            .get('http://localhost:7777/api/review/info', {
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                },
+            })
+            .then((response) => {
+                setReviews(response.data);
+            })
+            .catch((error) => {
+                console.error('Error fetching reviews:', error);
+            });
+    }, []);
+
+    // 개별 체크박스 핸들러
+    const checkItemHandler = (merchantUid, isChecked) => {
+        if (isChecked) {
+            setCheckItems((prev) => [...prev, merchantUid]); // 추가
+            console.log(merchantUid);
         } else {
-            newSelectedreviews.add(index); // 선택
+            setCheckItems((prev) => prev.filter((item) => item !== merchantUid)); // 제거
         }
-        setSelectedreviews(newSelectedreviews);
+    };
+
+    // 전체 선택/해제 핸들러
+    const allCheckedHandler = (isChecked) => {
+        if (isChecked) {
+            setCheckItems(currentreviews.map((review) => review.merchantUid)); // 현 페이지 모든 항목 선택
+            console.log(checkItems);
+        } else {
+            setCheckItems((prev) =>
+                prev.filter(
+                    (item) =>
+                        !currentreviews.map((review) => review.merchantUid).includes(item)
+                )
+            ); // 현 페이지 항목만 선택 해제
+        }
     };
 
     const handleDeleteSelected = () => {
-        const filteredreviews = reviews.filter(review => !selectedreviews.has(review.index));
-        setreviews(filteredreviews);
-        setSelectedreviews(new Set()); // 선택 해제
+        const newReviews = reviews.filter(
+            (review) => !checkItems.includes(review.merchantUid)
+        );
+        setReviews(newReviews);
+        axios
+            .put('http://localhost:7777/api/review/update', {
+                deleteReview : checkItems
+            }, {
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                }
+            })
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.error('Error fetching reviews:', error);
+            });
+        setCheckItems([]);
     };
-        
+
     return (
         <div className="review-management-page">
             <div className="review-management-title">리뷰 관리</div>
-                <div className='review-management-search'>
-                    <input type="search" className="review-search-input"></input>
-                    <img className="review-search-input-image" src={searchIcon}></img>
-                </div>
-                <div className="review-management-button">
-                    <button className="delete-button">삭제</button>
-                </div>
-                    <table className='review-management-table'>
-                        <thead className='review-management-thead'>
-                            <tr>
-                                <th>
-                                    <label className="custom-circle-checkbox">
-                                        <input type="checkbox" className="review-management-checkbox"
-                                                onChange={() => {
-                                                    if (selectedreviews.size === reviews.length) {
-                                                        setSelectedreviews(new Set()); // 모두 선택 해제
-                                                    } else {
-                                                        setSelectedreviews(new Set(reviews.map(review => review.index))); // 모두 선택
-                                                    }
-                                                }} 
-                                                checked={selectedreviews.size === reviews.length}
-                                        />
-                                        <span className="circle"></span> {/* 사용자 정의 원형 체크박스 */}
-                                    </label>
-                                </th>
-                                <th className='review-management-thead-th'>리뷰 번호</th>
-                                <th className='review-management-thead-th'>전시 번호</th>
-                                <th className='review-management-thead-th'>제목</th>
-                                <th className='review-management-thead-th'>작성자</th>
-                                <th className='review-management-thead-th'>작성일</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {reviews.map((review, index) => (
-                                <tr key={index}>
-                                    <td className="review-management-input-checkbox">
-                                        <label className="custom-circle-checkbox">
-                                            <input 
-                                                type="checkbox" 
-                                                className="review-management-checkbox"
-                                                checked={selectedreviews.has(review.index)} 
-                                                onChange={() => handleSelectreview(review.index)} 
-                                            />
-                                            <span className="circle"></span> {/* 사용자 정의 원형 체크박스 */}
-                                        </label>
-                                    </td>
-                                    <td className="review-management-td">{review.index}</td>
-                                    <td className="review-management-td">{review.exhibitionNo}</td>
-                                    <td className="review-info">{review.title}</td>
-                                    <td className="review-management-td">{review.id}</td>
-                                    <td className="review-management-td">{review.date}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+            <div className="review-management-search">
+                <input type="search" className="review-search-input" />
+                <img
+                    className="review-search-input-image"
+                    src={searchIcon}
+                    alt="search"
+                />
+            </div>
+            <div className="review-management-button">
+                <button className="delete-button" onClick={handleDeleteSelected}>
+                    삭제
+                </button>
+            </div>
+            <table className="review-management-table">
+                <thead className="review-management-thead">
+                    <tr>
+                        <th>
+                            {/* 1번 체크박스 */}
+                            <label className="custom-circle-checkbox">
+                                <input
+                                    type="checkbox"
+                                    className="review-management-checkbox"
+                                    onChange={(e) =>
+                                        allCheckedHandler(e.target.checked)
+                                    }
+                                    checked={
+                                        currentreviews.length > 0 &&
+                                        currentreviews.every((review) =>
+                                            checkItems.includes(review.merchantUid)
+                                        )
+                                    }
+                                />
+                                <span className="circle"></span>
+                            </label>
+                        </th>
+                        <th className="review-management-thead-th">리뷰 번호</th>
+                        <th className="review-management-thead-th">전시 번호</th>
+                        <th className="review-management-thead-th">제목</th>
+                        <th className="review-management-thead-th">작성자</th>
+                        <th className="review-management-thead-th">작성일</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {currentreviews.map((review, index) => (
+                        <tr key={index}>
+                            <td className="review-management-input-checkbox">
+                                {/* 2번 체크박스 */}
+                                <label className="custom-circle-checkbox">
+                                    <input
+                                        type="checkbox"
+                                        className="review-management-checkbox"
+                                        onChange={(e) =>
+                                            checkItemHandler(
+                                                review.merchantUid,
+                                                e.target.checked
+                                            )
+                                        }
+                                        checked={checkItems.includes(
+                                            review.merchantUid
+                                        )}
+                                    />
+                                    <span className="circle"></span>
+                                </label>
+                            </td>
+                            <td className="review-management-td">{review.merchantUid}</td>
+                            <td className="review-management-td">{review.exhibitionNo}</td>
+                            <td className="review-info">{review.exhibitionTitle}</td>
+                            <td className="review-management-td">{review.name}</td>
+                            <td className="review-management-td">{review.reviewDate}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
             <div className="pagination">
-                <div className="pagination11"><button className="prev">◀</button></div>
-                <div className="pagination1"><button className="one">1</button></div>
-                <div className="pagination1"><button className="two">2</button></div>
-                <div className="pagination1"><button className="three">3</button></div>
-                <div className="pagination1"><button className="four">4</button></div>
-                <div className="pagination1"><button className="five">5</button></div>
-                <div className="pagination1"><button className="six">6</button></div>
-                <div className="pagination1"><button className="seven">7</button></div>
-                <div className="pagination1"><button className="eight">8</button></div>
-                <div className="pagination1"><button className="nine">9</button></div>
-                <div className="pagination1"><button className="ten">10</button></div>
-                <div className="pagination12"><button className="next">▶</button></div>
+                <div className="pagination11">
+                    <button
+                        className="prev"
+                        onClick={() =>
+                            setCurrentPage((prev) => Math.max(prev - 1, 1))
+                        }
+                    >
+                        ◀
+                    </button>
+                </div>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (page) => (
+                        <button
+                            key={page}
+                            className={`pagination-button ${
+                                page === currentPage ? 'active' : ''
+                            }`}
+                            onClick={() => setCurrentPage(page)}
+                        >
+                            {page}
+                        </button>
+                    )
+                )}
+                <div className="pagination12">
+                    <button
+                        className="next"
+                        onClick={() =>
+                            setCurrentPage((prev) =>
+                                Math.min(prev + 1, totalPages)
+                            )
+                        }
+                    >
+                        ▶
+                    </button>
+                </div>
             </div>
         </div>
     );
