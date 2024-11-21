@@ -137,8 +137,9 @@ input[type="checkbox"] {
     padding: 0.5rem 1rem;
 }
 
-.pagination button:hover {
-    background-color:  #0B9B9B;
+.pagination.active {
+    background-color: #9DD7D7;
+    color: black;
 }
 
 .pagination11 button:hover {
@@ -186,8 +187,8 @@ input[type="checkbox"] {
     content: "";
     display: none;
     position: absolute;
-    left: 0.5rem; /* 체크 표시 위치 */
-    top: 0.3rem;
+    left: 0.4rem; /* 체크 표시 위치 */
+    top: 0.1rem;
     width: 0.6rem; /* 체크 표시 크기 */
     height: 0.8rem;
     border: solid #9DD7D7; /* 체크 표시 색상 */
