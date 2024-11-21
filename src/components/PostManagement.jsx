@@ -65,7 +65,7 @@ const PostManagement = () => {
                                                     if (selectedPosts.size === posts.length) {
                                                         setSelectedPosts(new Set()); // 모두 선택 해제
                                                     } else {
-                                                        setSelectedPosts(new Set(posts.map(post => post.index))); // 모두 선택
+                                                        setSelectedPosts(new Set(posts.map(post => post.postNo))); // 모두 선택
                                                     }
                                                 }} 
                                                 checked={selectedPosts.size === posts.length}
@@ -103,9 +103,11 @@ const PostManagement = () => {
                                             <span>{post.category}</span>
                                         ) : (
                                             <select id="role" defaultValue={post.category}>
+                                                <option value="공지"></option>
                                                 <option value="동행구인">동행 구인</option>
                                                 <option value="기대평">기대평</option>
                                                 <option value="정보 공유">정보 공유</option>
+                                                <option value="잡담"></option>
                                             </select>
                                         )}
                                     </td>
