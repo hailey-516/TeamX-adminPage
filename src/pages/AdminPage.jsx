@@ -1,7 +1,8 @@
 import React from 'react';
 import Slidebar from '../components/Slidebar.jsx';
-import MemberManagement from '../components/MemberManagement';
+// import MemberManagement from '../components/MemberManagement';
 import '../css/AdminPage.css';
+import { Link } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 
@@ -14,8 +15,6 @@ const AdminPage = () => {
         <div className="app">
             <div className="bar"><Slidebar /></div>
             <div className="changedisplay">
-                {/* <Outlet />
-                <Navigate to="member-management" replace /> */}
                 {isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />}
             </div>
         </div>

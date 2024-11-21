@@ -7,7 +7,7 @@ const InquiryAnswer = () => {
 
     const { inquiryNo } = useParams(); //
     const [inquiry, setInquiry] = useState(null);
-    const [answerContent, setAnswerContent] = useState(''); // 답변 내용을 관리할 상태 추가
+    const [responseContent, setResponseContent] = useState(''); // 답변 내용을 관리할 상태 추가
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -15,6 +15,10 @@ const InquiryAnswer = () => {
             try {
                 const response = await axios.get(`http://localhost:7777/api/inquiries/${inquiryNo}`);
                 setInquiry(response.data);
+
+                if(response.data.responseContent) {
+                    setResponseContent(response.data.responseContent)
+                }
             } catch (error) {
                 console.error('Error fetching inquiry:', error);
             }
@@ -28,14 +32,14 @@ const InquiryAnswer = () => {
         try {
     
             await axios.put(`http://localhost:7777/api/inquiries/save/${inquiryNo}`, {
-                response_content: {answerContent},
-                inquiry_response: 'Y'
+                responseContent: responseContent,
+                inquiryResponse: 'Y'
             });
             alert("성공적으로 저장되었습니다.");
-            // 성공적으로 저장된 후 inquiryManagement 페이지로 리다이렉트
-            navigate('/inquiryManagement');
+            
+            navigate(`/admin/inquiry-management`);
         } catch (error) {
-            console.error('Error saving answer:', error);
+            console.error('Error saving answer:', error.response ? error.response.data : error.message);
             alert("답변 내용이 저장되지 않았습니다.");
         }
     };
@@ -63,8 +67,8 @@ const InquiryAnswer = () => {
                 <div className="answer-content">
                     <textarea 
                         className="answer-content-text" 
-                        value={answerContent} 
-                        onChange={(e) => setAnswerContent(e.target.value)} // 입력값 변경 시 상태 업데이트
+                        value={responseContent} 
+                        onChange={(e) => setResponseContent(e.target.value)} // 입력값 변경 시 상태 업데이트
                         placeholder="답변 내용을 입력하세요."
                     />
                 </div>
