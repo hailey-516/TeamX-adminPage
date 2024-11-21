@@ -1,0 +1,86 @@
+html, body {
+    font-size: 62.5%;
+    font-family: "Noto Sans", sans-serif;
+    margin: 0; 
+    padding: 0; 
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+* {
+    box-sizing: inherit;
+}
+
+.notice-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 5rem;
+}
+
+.notice-section {
+    margin-top: 10rem;
+    padding-bottom: 0.5rem; 
+    font-size: 2.3rem;
+    font-weight: bolder;
+    border-bottom: 0.3rem solid black;
+    text-align: center;
+}
+
+.notice-info {
+    margin: 6rem 0rem;
+    font-size: 1.5rem;
+    color: #5B5B5B;
+}
+
+.notice, .notice-content {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    width: 30%;
+}
+
+.notice-title, .notice-content-title {
+    font-size: 1.6rem;
+    font-weight: bolder;
+    margin-top: 1rem;
+}
+
+.notice-title-content, .notice-content-description {
+    border: 0.2rem solid #9DD7D7;
+    border-radius: 1.5rem;
+    font-size: 1.4rem;
+    padding: 1.5rem 2rem;
+    margin: 2rem 0rem;
+    width: 100%;
+    line-height: 2rem;
+}
+
+.notice-content-description {
+    height: 10rem;
+    resize: none; /* 크기 조절 비활성화 */
+    outline: none; /* 포커스 시 아웃라인 제거 */
+    box-shadow: none; 
+}
+
+.registration-buttons {
+    display: flex;
+    margin-top: 2rem;           
+}
+
+.registration-button {
+    border: none;
+    border-radius: 2rem;
+    background-color: #0B9B9B;
+    color: white;
+    font-size: 1.5rem;
+    padding: 1rem 2rem;
+    font-weight: bolder;
+    cursor: pointer;
+}
+
+.pagination-button.active {
+    background-color:  #9DD7D7; 
+    color: #000;
+}

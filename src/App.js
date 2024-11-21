@@ -12,6 +12,7 @@ import InquiryManagement from './components/InquiryManagement';
 import InquiryAnswer from './components/InquiryAnswer';
 import ExhibitionManagement from './components/ExhibitionManagement';
 import ReviewManagement from './components/ReviewManagement';
+import NoticeWrite from './components/NoticeWrite';
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
             <Route path="inquiry/:inquiryNo" element={<InquiryAnswer />} />
             <Route path="exhibition-management" element={<ExhibitionManagement/>} />
             <Route path="review-management" element={<ReviewManagement/>}/>
+            <Route path="notice-write" element={<NoticeWrite/>}/>
           </Route>
           
         </Routes>
