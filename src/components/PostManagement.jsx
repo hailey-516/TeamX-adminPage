@@ -197,6 +197,7 @@ const PostManagement = () => {
                                                         setSelectedPosts(new Set()); // 모두 선택 해제
                                                     } else {
                                                         setSelectedPosts(new Set(posts.map(post => post.postNo))); // 모두 선택
+                                                        setSelectedPosts(new Set(posts.map(post => post.postNo))); // 모두 선택
                                                     }
                                                 }} 
                                                 checked={selectedPosts.size === posts.length}
