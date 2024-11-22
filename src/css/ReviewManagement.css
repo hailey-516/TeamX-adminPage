@@ -198,3 +198,8 @@ input[type="checkbox"] {
 .custom-circle-checkbox input:checked + .circle:after {
     display: block;
 }
+
+.active {
+    background-color: #9DD7D7;
+    color: black;
+}
