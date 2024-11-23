@@ -13,7 +13,7 @@ const [member, setMember] = useState({});
         const fetchMember = async () => {
 
             try {
-                const response = await axios.get(`http://localhost:7777/api/members/info/${userNo}`);
+                const response = await axios.get(`/api/members/info/${userNo}`);
                 console.log(response.data);
                 setMember(response.data);
             } catch (error) {
@@ -30,7 +30,7 @@ const [member, setMember] = useState({});
 
         e.preventDefault();
         try {
-            await axios.put(`http://localhost:7777/api/members/${userNo}`, member);
+            await axios.put(`/api/members/${userNo}`, member);
             alert("회원 정보 수정에 성공했습니다.");
             navigate(`/admin/member-management`);
         } catch (error) {
@@ -43,7 +43,7 @@ const [member, setMember] = useState({});
     //탈퇴처리 버튼 클릭
     const handleWithdraw = async () => {
         try {
-            const response = await axios.post('http://localhost:7777/api/members/withdraw', {
+            const response = await axios.post('/api/members/withdraw', {
                 userId: member.userId,
             });
     

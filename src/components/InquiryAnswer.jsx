@@ -13,7 +13,7 @@ const InquiryAnswer = () => {
     useEffect(() => {
         const fetchInquiry = async () => {
             try {
-                const response = await axios.get(`http://localhost:7777/api/inquiries/${inquiryNo}`);
+                const response = await axios.get(`/api/inquiries/${inquiryNo}`);
                 setInquiry(response.data);
 
                 if(response.data.responseContent) {
@@ -31,7 +31,7 @@ const InquiryAnswer = () => {
     const handleRegister = async () => {
         try {
     
-            await axios.put(`http://localhost:7777/api/inquiries/save/${inquiryNo}`, {
+            await axios.put(`/api/inquiries/save/${inquiryNo}`, {
                 responseContent: responseContent,
                 inquiryResponse: 'Y'
             });

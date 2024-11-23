@@ -18,7 +18,7 @@ const MemberManagement = () => {
     const fetchMembers = async () => {
 
         try {
-            const response = await axios.get('http://localhost:7777/api/members');
+            const response = await axios.get('/api/members');
             setMembers(response.data);
         } catch (error) {
             console.error("Error fetching members", error);
@@ -36,7 +36,7 @@ const MemberManagement = () => {
         }
 
         try {
-            const response = await axios.get(`http://localhost:7777/api/members/search?name=${searchTerm}`);
+            const response = await axios.get(`/api/members/search?name=${searchTerm}`);
             console.log(response.data);
             setMembers(response.data);
             setCurrentPage(1);
