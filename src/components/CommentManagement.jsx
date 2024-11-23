@@ -18,7 +18,7 @@ const CommentManagement = () => {
     // 댓글 목록을 불러오는 함수
     const fetchComments = async (keyword = "") => {
         try {
-            const response = await axios.get('http://localhost:7777/api/parent/reply/select', {
+            const response = await axios.get('/api/parent/reply/select', {
                 params: {
                     searchKeyword: keyword // 검색어 파라미터로 전달
                 }
@@ -89,14 +89,14 @@ const CommentManagement = () => {
     
         try {
             if (parentReplyNos.length > 0) {
-                await axios.post("http://localhost:7777/api/parent/reply/delete", parentReplyNos, {
+                await axios.post("/api/parent/reply/delete", parentReplyNos, {
                     headers: {
                         "Content-Type": "application/json",
                     },
                 });
             }
             if (childrenReplyNos.length > 0) {
-                await axios.post("http://localhost:7777/api/children/reply/delete", childrenReplyNos, {
+                await axios.post("/api/children/reply/delete", childrenReplyNos, {
                     headers: {
                         "Content-Type": "application/json",
                     },

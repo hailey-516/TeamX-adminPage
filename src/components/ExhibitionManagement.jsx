@@ -18,7 +18,7 @@ const ExhibitionManagement = () => {
     const fetchExhibitions = async () => {
         
         try {
-            const response = await axios.get('http://localhost:7777/api/exhibitions');
+            const response = await axios.get('/api/exhibitions');
             setExhibitions(response.data);
         } catch (error) {
             console.error("Error fetching exhibitions", error);
@@ -36,7 +36,7 @@ const ExhibitionManagement = () => {
         }
 
         try {
-            const response = await axios.get(`http://localhost:7777/api/exhibitions/search?title=${searchTerm}`);
+            const response = await axios.get(`/api/exhibitions/search?title=${searchTerm}`);
             setExhibitions(response.data);
             setCurrentPage(1);
             setSearchTerm('');
@@ -52,7 +52,7 @@ const ExhibitionManagement = () => {
 
         if (window.confirm("정말로 이 전시를 삭제하시겠습니까?")) { 
             try {
-                await axios.patch(`http://localhost:7777/api/exhibitions/${exhibitionNo}`, { status: 'Y' });
+                await axios.patch(`/api/exhibitions/${exhibitionNo}`, { status: 'Y' });
                 setExhibitions(prevExhibitions => 
                     prevExhibitions.filter(exhibition => exhibition.exhibitionNo !== exhibitionNo)
                 );

@@ -20,7 +20,7 @@ const PostManagement = () => {
     // community 테이블의 전체 데이터 불러오기
     const selectPostList = async () => {
         try {
-            const response = await axios.get('http://localhost:7777/api/community/list');
+            const response = await axios.get('/api/community/list');
             setPosts(response.data);
         } catch (error) {
             console.error("Error select post list", error);
@@ -33,7 +33,7 @@ const PostManagement = () => {
         const value = e.target.value;
     
         try {
-            await axios.post('http://localhost:7777/api/community/category', {
+            await axios.post('/api/community/category', {
                 category: value,
                 postNo: postNo,
             });
@@ -63,7 +63,7 @@ const PostManagement = () => {
         }
 
         try {
-            const response = await axios.get(`http://localhost:7777/api/community/search?keyword=${searchPost}`);
+            const response = await axios.get(`/api/community/search?keyword=${searchPost}`);
             console.log(response.data);
             setPosts(response.data);
             // setCurrentPage(1);
@@ -102,7 +102,7 @@ const PostManagement = () => {
 
         try {
             // 서버로 선택된 게시글 번호 배열 전송
-            await axios.post('http://localhost:7777/api/community/delete', {
+            await axios.post('/api/community/delete', {
                 postNos: selectedPostNos,
             });
             alert("선택된 게시글이 삭제되었습니다.");

@@ -16,7 +16,7 @@ const NoticeWrite = () => {
         }
 
         try {
-            await axios.post('http://localhost:7777/api/community/notice', {
+            await axios.post('/api/community/notice', {
                 postTitle: noticeTitle,
                 postContent: noticeContent
             });
