@@ -21,7 +21,7 @@ const InquiryManagement = () => {
     const fetchInquiries = async () => {
 
         try {
-            const response = await axios.get('http://localhost:7777/api/inquiries');
+            const response = await axios.get('/api/inquiries');
             setInquiries(response.data);
         } catch (error) {
             console.error('Error fetching inquiries:', error);
@@ -50,7 +50,7 @@ const InquiryManagement = () => {
         }
 
         try {
-            const response = await axios.get(`http://localhost:7777/api/inquiries/search?userId=${searchUserId}`);
+            const response = await axios.get(`/api/inquiries/search?userId=${searchUserId}`);
             console.log(response.data);
             setInquiries(response.data);
             // setCurrentPage(1);

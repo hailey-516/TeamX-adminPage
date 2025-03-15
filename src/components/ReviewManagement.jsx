@@ -17,7 +17,7 @@ const ReviewManagement = () => {
 
     useEffect(() => {
         axios
-            .get('http://localhost:7777/api/review/info', {
+            .get('/api/review/info', {
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
                 },
@@ -61,7 +61,7 @@ const ReviewManagement = () => {
         );
         setReviews(newReviews);
         axios
-            .put('http://localhost:7777/api/review/update', {
+            .put('/api/review/update', {
                 deleteReview : checkItems
             }, {
                 headers: {
